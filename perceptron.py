@@ -4,6 +4,8 @@ Nov 28 2019
 Rishi Neural Net
 '''
 import random
+from data_gen import trainData as trainingData
+from data_gen import valData as validationData
 
 class Perceptron(object):
     inputCt=None
