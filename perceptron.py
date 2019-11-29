@@ -1,5 +1,9 @@
+'''
+Ram Paranjothy
+Nov 28 2019
+Rishi Neural Net
+'''
 import random
-import math
 
 class Perceptron(object):
     i=[]
@@ -18,9 +22,7 @@ class Perceptron(object):
         self.normalize()
             
         # self.output=output
-    def show(self):
-        print 'Input {0} - Output {1}'.format(self.i,self.o)    
-    
+  
     def activate(self):
         # randomly initialize weigths between 1 and -1
         self.weight=[format(random.uniform(-1,1),"1.4f") for _ in self.i]
