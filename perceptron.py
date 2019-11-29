@@ -31,7 +31,8 @@ class Perceptron(object):
   
     def activate(self):
         # randomly initialize weigths between 1 and -1
-        self.weight=[format(random.uniform(-1,1),"1.2f") for _ in range(self.inputCt)]
+        # self.weight=[format(random.uniform(-1,1),"1.2f") for _ in range(self.inputCt)]
+        self.weight=[random.uniform(-1,1) for _ in range(self.inputCt)]
 
     def guess(self):
         # compute the weighted sum for input and map to 1 and -1
@@ -48,7 +49,8 @@ class Perceptron(object):
     def normalize(self):
         maxInput=max([abs(_) for _ in self.i])
         if maxInput>1 or abs(min(self.i)) > 1:
-            self.i=[format(float(_)/float(maxInput),'1.2f') for _ in self.i]
+            # self.i=[format(float(_)/float(maxInput),'1.2f') for _ in self.i]
+            self.i=[float(_)/float(maxInput) for _ in self.i]
             print("*"*5)
             # print('Normalized inputs : {0}'.format(self.i))
 
@@ -85,19 +87,20 @@ class Perceptron(object):
         maxInput=max([abs(_) for _ in inputs[0]])
         lbl=inputs[1]
         if maxInput>1 or abs(min(self.i)) > 1:
-            inputsNormalized=[format(float(_)/float(maxInput),'1.2f') for _ in inputs[0]]
-            print("*"*5)
+            # inputsNormalized=[format(float(_)/float(maxInput),'1.2f') for _ in inputs[0]]
+            inputsNormalized=[float(_)/float(maxInput) for _ in inputs[0]]
+            # print("*"*5)
 
         # for this to be accurate, your weight shuld have been trained.
         x=reduce(lambda x,o:o+x,map(lambda x:float(x[0])*float(x[1]), zip(weight,inputsNormalized)))
         out= 1 if x>=0 else -1
-        # return ('Input: {0}| Label: {1}| Prediction: {2}| Matching: {3}'.format(inputs[0],lbl,out,lbl==out))
-        return {
-                'input':inputs[0],
-                'label':lbl,
-                'prediction':out,
-                'matched':lbl==out
-        }
+        return ('Input: {0}\t| Label: {1}\t| Prediction: {2}\t| Matching: {3}\t'.format(inputs[0],lbl,out,lbl==out))
+        # return {
+        #         'input':inputs[0],
+        #         'label':lbl,
+        #         'prediction':out,
+        #         'matched':lbl==out
+        # }
 
 
 
@@ -115,8 +118,10 @@ if __name__ == "__main__":
 
     validationData=[([20,40,50],1),([20,40,-50],-1),([200,400,-440],-1),([200,400,550],1),([202,204,-505],-1)]
     
-    print([p.predict(vData,tunedWeight) for vData in validationData])
-        # print(p.predict(vData,tunedWeight))
+    # print([p.predict(vData,tunedWeight) for vData in validationData])
+    for vData in validationData:
+        print(p.predict(vData,tunedWeight))
+
 
 
 
