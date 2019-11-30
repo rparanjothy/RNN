@@ -33,49 +33,62 @@ class RNN(object):
         self.initializeWeights()
         self.X=np.array(x[0]).reshape(self.inputCt,1)
         self.H=np.dot(self.weight1,self.X)
-        print 'B1:\n',self.b1
-        self.H=np.add(self.H,self.b1)
-        print 'H:\n',self.H
+        # print 'B1:\n',self.b1
+        # self.H=np.add(self.H,self.b1)
+        #print 'H:\n',self.H
         self.H=(1/(1+np.exp(-self.H)))
-        print 'H (Sigmoid):\n',self.H
+        #print 'H (Sigmoid):\n',self.H
 
         self.Y=np.array(x[1]).reshape(self.outputCt,1)
         guess=np.dot(self.weight2,self.H)
-        guess=np.add(guess,self.b2)
-        print 'B2:\n',self.b2
-        print 'Computed\n',guess
+        # guess=np.add(guess,self.b2)
+        # #print 'B2:\n',self.b2
+        #print 'Computed\n',guess
         g=(1/(1+np.exp(-guess)))
-        print 'sigmoid:\n',g
+        #print 'sigmoid:\n',g
         err=self.Y-g
-        print 'Err\n',err
+        #print 'Err\n',err
+
         w2t=np.transpose(self.weight2)
         hiddenError=np.dot(w2t,err)
-        print 'HiddenError\n',hiddenError
-        print "Gradients\n"
+        #print 'HiddenError\n',hiddenError
+        #print "Gradients\n"
         
         sigG=(1/(1+np.exp(g)))
         guessDerivative=sigG*(1-sigG)
-        print guessDerivative
+        #print guessDerivative
 
        
         i=guessDerivative*0.1*err  
-        print 'GuessDer*lr*error\n',i
+        #print 'GuessDer*lr*error\n',i
 
 
         sigH=(1/(1+np.exp(self.H)))
         HDerivative=sigH*(1-sigH)
-        print 'HDerivative\n',HDerivative
+        #print 'HDerivative\n',HDerivative
 
         o1=np.dot(np.transpose(g),i)
-        print 'o1\n',o1
+        #print 'o1\n',o1
 
 
         
         j=HDerivative*0.1*hiddenError  
-        print 'HiddenDer*lr*error\n',j
+        #print 'HiddenDer*lr*error\n',j
 
         h1=np.dot(np.transpose(self.H),j)
-        print 'h1\n',h1
+        #print 'h1\n',h1
+
+        self.weight1=self.weight1+h1
+        self.weight2=self.weight2+o1
+
+        print 'after backpro'
+        print "-="*40
+        print 'ComputedSigmoided\n',g
+        print 'Err\n',err
+        
+
+        print 'w1:\n',self.weight1
+        print 'w1:\n',self.weight2
 
 
 
@@ -93,7 +106,9 @@ class RNN(object):
             
 if __name__ == "__main__":
     rnn=RNN(2,4,2)
-    trainingData=([1,1],[1,0])
-    rnn.train(trainingData)
+    
+    trainingData=[([1,1],[1,0]),([0,1],[1,0]),([1,0],[0,0]),([1,1],[1,0]),([0,1],[1,0]),([1,0],[0,0]),([1,1],[1,0]),([0,1],[1,0]),([1,0],[0,0])]
+    for x in trainingData:
+        rnn.train(x)
     # rnn.validate(validationData)
     # rnn.predict(predictInputs)
