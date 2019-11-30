@@ -104,6 +104,8 @@ class Perceptron(object):
 if __name__ == "__main__":
     # trainingData=[([2,4,5],1),([2,4,-5],-1),([2,4,-44],-1),([2,4,55],1),([22,24,-55],-1),
     # ([12,14,5],1),([22,24,-5],-1),([32,34,-44],-1),([42,4,55],1),([22,24,-55],-1),([22,24,55],1)]
+    trainingData=[([2,5],1),([2,-5],-1),([4,-4],-1),([2,6],1),([4,-5],-1),
+    ([1,5],1),([4,-5],-1),([3,-4],-1),([6,8],1),([4,-4],-1),([2,5],1),([4,-5],-1)]
     p=Perceptron(2,1)    
     for d in trainingData:
         p.train(d)
@@ -115,6 +117,7 @@ if __name__ == "__main__":
     print("Tuned Weight: {0}".format(tunedWeight))
 
     # validationData=[([20,40,50],1),([20,40,-50],-1),([200,400,-440],-1),([200,400,550],1),([202,204,-505],-1)]
+    validationData=[([2,5],1),([2,-5],-1),([2,-4],-1),([1,9],1),([2.5,-5],-1)]
     
     o=[p.predict(vData,tunedWeight) for vData in validationData]
     print(reduce(lambda x,o:o+'\n'+x,map(lambda x:'{0}|{1}|{2}|{3}'.format(x['matched'],x['input'],x['label'],x['prediction']),o)))
