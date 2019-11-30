@@ -6,13 +6,14 @@ Rishi Neural Net
 import random
 from data_gen import trainData as trainingData
 from data_gen import valData as validationData
+import math
 
 class Perceptron(object):
     inputCt=None
     i=[]
     weight=[]
     bias=0
-    lrate=0.01
+    lrate=0.1
     target=None
 
     def __init__(self,iCt,oCt):
@@ -29,6 +30,10 @@ class Perceptron(object):
     def guess(self):
         # compute the weighted sum for input and map to 1 and -1
         x=reduce(lambda x,o:o+x,map(lambda x:float(x[0])*float(x[1]), zip(self.weight,self.i)))
+        # print x
+        # xx=1/(1+math.exp(-x))
+        # print xx
+        # return x
         return 1 if x>=0 else -1
 
     def setData(self,x):
@@ -39,9 +44,11 @@ class Perceptron(object):
         self.target=trainTgt
 
     def normalize(self):
-        maxInput=max([abs(_) for _ in self.i])
-        if maxInput>1 or abs(min(self.i)) > 1:
-            self.i=[float(_)/float(maxInput) for _ in self.i]
+        # maxInput=max([abs(_) for _ in self.i])
+        # if maxInput>1 or abs(min(self.i)) > 1:
+        #     self.i=[float(_)/float(maxInput) for _ in self.i]
+
+        self.i=map(lambda x: 1/(1+math.exp(-x)),self.i)   
 
     def train(self,x):
         print("--"*10)
@@ -74,10 +81,12 @@ class Perceptron(object):
         '''
         THis is the predict guy
         '''
-        maxInput=max([abs(_) for _ in inputs[0]])
+        # maxInput=max([abs(_) for _ in inputs[0]])
         lbl=inputs[1]
-        if maxInput>1 or abs(min(self.i)) > 1:
-            inputsNormalized=[float(_)/float(maxInput) for _ in inputs[0]]
+        # if maxInput>1 or abs(min(self.i)) > 1:
+        #     inputsNormalized=[float(_)/float(maxInput) for _ in inputs[0]]
+
+        inputsNormalized=map(lambda x: 1/(1+math.exp(-x)),inputs[0])   
 
         # for this to be accurate, your weight shuld have been trained.
         x=reduce(lambda x,o:o+x,map(lambda x:float(x[0])*float(x[1]), zip(weight,inputsNormalized)))
@@ -93,9 +102,9 @@ class Perceptron(object):
 
 
 if __name__ == "__main__":
-    trainingData=[([2,4,5],1),([2,4,-5],-1),([2,4,-44],-1),([2,4,55],1),([22,24,-55],-1),
-    ([12,14,5],1),([22,24,-5],-1),([32,34,-44],-1),([42,4,55],1),([22,24,-55],-1),([22,24,55],1)]
-    p=Perceptron(3,1)    
+    # trainingData=[([2,4,5],1),([2,4,-5],-1),([2,4,-44],-1),([2,4,55],1),([22,24,-55],-1),
+    # ([12,14,5],1),([22,24,-5],-1),([32,34,-44],-1),([42,4,55],1),([22,24,-55],-1),([22,24,55],1)]
+    p=Perceptron(2,1)    
     for d in trainingData:
         p.train(d)
 
@@ -105,7 +114,7 @@ if __name__ == "__main__":
     tunedWeight=p.getWeights()
     print("Tuned Weight: {0}".format(tunedWeight))
 
-    validationData=[([20,40,50],1),([20,40,-50],-1),([200,400,-440],-1),([200,400,550],1),([202,204,-505],-1)]
+    # validationData=[([20,40,50],1),([20,40,-50],-1),([200,400,-440],-1),([200,400,550],1),([202,204,-505],-1)]
     
     o=[p.predict(vData,tunedWeight) for vData in validationData]
     print(reduce(lambda x,o:o+'\n'+x,map(lambda x:'{0}|{1}|{2}|{3}'.format(x['matched'],x['input'],x['label'],x['prediction']),o)))
